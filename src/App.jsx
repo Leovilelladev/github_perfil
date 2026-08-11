@@ -1,32 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Perfil from "./components/Perfil";
-import Formulario from "./components/Formulario"
 import ReposList from "./components/ReposList";
-
+import Busca from "./components/Busca";
+import styles from './App.module.css';
 
 function App() {
-  const [formularioEstaVisivel, setFormularioEstaVisivel] = useState(true);
-  const [nomeUsuario, setNomeUsuario ] =useState('');
+  const [nomeUsuario, setNomeUsuario] = useState('');
+  const [usuario, setUsuario] = useState(null);
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState(false);
 
-  return(
+  useEffect(() => {
+    if (!nomeUsuario) return;
+
+    setCarregando(true);
+    setErro(false);
+    setUsuario(null);
+
+    fetch(`https://api.github.com/users/${nomeUsuario}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Usuário não encontrado');
+        }
+        return res.json();
+      })
+      .then((dados) => {
+        setUsuario(dados);
+      })
+      .catch(() => {
+        setErro(true);
+      })
+      .finally(() => {
+        setCarregando(false);
+      });
+  }, [nomeUsuario]);
+
+  return (
     <>
-    <input type="text" onBlur={(e) => setNomeUsuario(e.target.value)} />
+      <Busca aoBuscar={setNomeUsuario} carregando={carregando} />
 
-      {nomeUsuario.length > 4 && (
+      {carregando && <p className={styles.mensagem}>Procurando usuário...</p>}
+
+      {erro && <p className={styles.mensagem}>Usuário não encontrado 😕</p>}
+
+      {usuario && (
         <>
-          <Perfil nomeUsuario={nomeUsuario}/>
-          <ReposList nomeUsuario={nomeUsuario}/>
+          <Perfil usuario={usuario} />
+          <ReposList nomeUsuario={usuario.login} />
         </>
       )}
-
-      {/* {formularioEstaVisivel && (
-        <Formulario />
-      )}
-
-      <button onClicl={() =>setFormularioEstaVisivel(!formularioEstaVisivel)} type="button">toggle form</button> */}
     </>
-
   )
 }
 

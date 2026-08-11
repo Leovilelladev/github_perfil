@@ -1,0 +1,5 @@
+.mensagem {
+    text-align: center;
+    margin-top: 24px;
+    color: var(--corSecundaria);
+}

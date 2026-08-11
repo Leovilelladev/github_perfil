@@ -1,0 +1,50 @@
+.form {
+    max-width: 420px;
+    margin: 60px auto 24px;
+    text-align: center;
+}
+
+.label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--corPrincipal);
+}
+
+.linha {
+    display: flex;
+    gap: 8px;
+}
+
+.input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 2px solid var(--corSecundaria);
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+}
+
+.input:focus {
+    border-color: var(--corPrincipal);
+}
+
+.botao {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--corPrincipal);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.botao:hover {
+    opacity: 0.85;
+}
+
+.botao:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
